@@ -31,7 +31,7 @@ def GlobalToOctaveBands(model,level_input):
     '''
     the output is a dict:
     - pink noise: with keys [63, 125, 250, 500, 1000 , 2000, 4000, 8000] and value the levels in bands
-    - ISO traffic road: with {125 : -10.2, 250 : -10.2, 500 : -7.2, 1000 : -3.9, 2000 : -6.4, 4000 : -11.4}
+    - ISO traffic road: with {125 : -14.5, 250 : -10.2, 500 : -7.2, 1000 : -3.9, 2000 : -6.4, 4000 : -11.4}
     '''
     level_output = {}
 
@@ -41,7 +41,7 @@ def GlobalToOctaveBands(model,level_input):
 
         # ISO 1793-3
         if model == 'ISO_traffic_road':
-            levels_to_subctract_bands = {125 : -10.2, 250 : -10.2, 500 : -7.2, 1000 : -3.9, 2000 : -6.4, 4000 : -11.4}
+            levels_to_subctract_bands = {125 : -14.5, 250 : -10.2, 500 : -7.2, 1000 : -3.9, 2000 : -6.4, 4000 : -11.4}
 
             for band in list(levels_to_subctract_bands.keys()):
                 level_output[band] = round(level_input + levels_to_subctract_bands[band],1)
@@ -61,6 +61,26 @@ def GlobalToOctaveBands(model,level_input):
     return level_output
 
 
+def DetailOctaveBandsToGlobal(level_input):
+    '''
+    level_input: has to be a dict with keys [63, 125, 250, 500, 1000 , 2000, 4000, 8000] and value the levels in bands
+    '''
+
+    level_output = 0
+
+    for ref_period in level_input:
+        levels_bands = level_input[ref_period]
+        for bands in levels_bands.keys():
+            if levels_bands[bands] != None:
+                if levels_bands[bands] > 0:
+                    level_output = level_output + 10 ** (levels_bands[bands] / 10.)
+
+    if level_output > 0:
+        level_output = round(10 * log10(level_output), 1)
+
+    return level_output
+
+
 def OctaveBandsToGlobal(level_input):
     '''
     level_input: has to be a dict with keys [63, 125, 250, 500, 1000 , 2000, 4000, 8000] and value the levels in bands
@@ -69,7 +89,8 @@ def OctaveBandsToGlobal(level_input):
     level_output = 0
 
     for band in level_input:
-        level_output = level_output + 10**(level_input[band]/10.)
+        if level_input[band] != None:
+            level_output = level_output + 10**(level_input[band]/10.)
 
 
     if level_output > 0:
@@ -175,7 +196,10 @@ class AtmosphericAbsorption(object):
         attenuation = self.attenuation()
 
         for band in self.level_input:
-            level_atm[band] = round(self.level_input[band] - attenuation[band],1)
+            if self.level_input[band] != None:
+                level_atm[band] = round(self.level_input[band] - attenuation[band],1)
+            else:
+                level_atm[band] = None
         return level_atm
 
     def attenuation(self):

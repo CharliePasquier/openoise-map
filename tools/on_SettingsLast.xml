@@ -2,31 +2,31 @@
 
     <directory>
         <default />
-        <last>C:/Users/pierl/Desktop/test_openoise</last>
+        <last></last>
     </directory>
 
     <layers>
         <receivers>
-            <name>grid1</name>
-            <path>C:/Users/pierl/Desktop/test_openoise/grid1.shp</path>
-            <custom3d>False</custom3d>
+            <name></name>
+            <path></path>
+            <custom3d></custom3d>
             <custom3dfield />
         </receivers>
 
         <sources>
 	    <pts>	
-		<name />
-		<path />
+		<name></name>
+		<path></path>
 	    </pts>
 	    <roads>	
-		<name>roads_CNOSSOS</name>
-		<path>C:/Users/pierl/Desktop/test_openoise/roads_CNOSSOS.shp</path>
+		<name />
+		<path />
 	    </roads>
         </sources>
 
         <buildings>
-            <name>buildings</name>
-            <path>C:/Users/pierl/Desktop/test_openoise/buildings.shp</path>
+            <name />
+            <path />
         </buildings>
 
         <emissions_points>
@@ -46,61 +46,115 @@
     </layers>
 
     <options>
-        <research_ray>50</research_ray>
-        <temperature>20</temperature>
-        <humidity>70</humidity>
-        <diff_skip>False</diff_skip>
-        <save_emission>False</save_emission>
-        <height_receiver>False</height_receiver>
-        <threedglobal>False</threedglobal>
-        <threedglobal_rays>False</threedglobal_rays>
+        <research_ray></research_ray>
+        <temperature></temperature>
+        <humidity></humidity>
+        <diff_skip></diff_skip>
+        <save_emission></save_emission>
+        <height_receiver></height_receiver>
+        <threedglobal></threedglobal>
+        <threedglobal_rays></threedglobal_rays>
         <field3D />
 
         <den>
-            <day_hours>14</day_hours> 
-            <eve_hours>2</eve_hours>            
-            <nig_hours>8</nig_hours>                                                            
-            <day_penalty>0</day_penalty> 
-            <eve_penalty>5</eve_penalty>            
-            <nig_penalty>10</nig_penalty>
+            <day_hours></day_hours>
+            <eve_hours></eve_hours>
+            <nig_hours></nig_hours>
+            <day_penalty></day_penalty>
+            <eve_penalty></eve_penalty>
+            <nig_penalty></nig_penalty>
         </den>
     </options>
     
     <emission>
         <implementation>
-		<pts />
-		<roads>CNOSSOS</roads>
+		<pts></pts>
+        <pts_freq></pts_freq>
+		<roads />
         </implementation>
 
 	<period>
 		<pts>
-		    <gen />
-		    <day />            
-		    <eve />            
-		    <nig />  
+		    <gen></gen>
+		    <day></day>
+		    <eve></eve>
+		    <nig></nig>
 		</pts>
+         <freq>
+            <gen></gen>
+            <day></day>
+            <eve></eve>
+            <nig></nig>
+        </freq>
 		<roads>
-		    <gen>False</gen>
-		    <day>False</day>            
-		    <eve>False</eve>            
-		    <nig>True</nig>  
+		    <gen />
+		    <day />
+		    <eve />
+		    <nig />
 		</roads>
-	    <den>False</den>                                                          	     
+	    <den></den>
 	</period>
-    
+
         <POWER_P>
-            <gen />
-            <day />            
-            <eve />            
-            <nig />                                                            
+            <gen></gen>
+            <day />
+            <eve />
+            <nig />
         </POWER_P>
-        
+
+        <POWER_P_GEN_FREQ>
+            <f63></f63>
+            <f125></f125>
+            <f250></f250>
+            <f500></f500>
+            <f1000></f1000>
+            <f2000></f2000>
+            <f4000></f4000>
+            <f8000></f8000>
+        </POWER_P_GEN_FREQ>
+        <POWER_P_DAY_FREQ>
+            <f63></f63>
+            <f125></f125>
+            <f250></f250>
+            <f500></f500>
+            <f1000></f1000>
+            <f2000></f2000>
+            <f4000></f4000>
+            <f8000></f8000>
+        </POWER_P_DAY_FREQ>
+        <POWER_P_EVE_FREQ>
+            <f63></f63>
+            <f125></f125>
+            <f250></f250>
+            <f500></f500>
+            <f1000></f1000>
+            <f2000></f2000>
+            <f4000></f4000>
+            <f8000></f8000>
+        </POWER_P_EVE_FREQ>
+        <POWER_P_NIG_FREQ>
+            <f63></f63>
+            <f125></f125>
+            <f250></f250>
+            <f500></f500>
+            <f1000></f1000>
+            <f2000></f2000>
+            <f4000></f4000>
+            <f8000></f8000>
+        </POWER_P_NIG_FREQ>
         <POWER_R>
             <gen />
             <day />            
             <eve />            
             <nig />                                                            
         </POWER_R>
+
+        <CNOSSOS_R>
+            <gen />
+            <day />
+            <eve />
+            <nig />
+        </CNOSSOS_R>
         
         <NMPB>
             <gen_l_n />
@@ -163,8 +217,8 @@
             <eve_4b_n />
             <eve_4b_s />
                         
-            <nig_1_n>light_n</nig_1_n>
-            <nig_1_s>light_v</nig_1_s>            
+            <nig_1_n />
+            <nig_1_s />            
             <nig_2_n />
             <nig_2_s />
             <nig_3_n />
@@ -174,8 +228,8 @@
             <nig_4b_n />
             <nig_4b_s />                                    
                         
-            <surface>Surface</surface>                    
-            <slope>Slope</slope>  
+            <surface />                    
+            <slope />  
 
         </CNOSSOS>       
     </emission>    

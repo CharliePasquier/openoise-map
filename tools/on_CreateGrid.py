@@ -23,11 +23,11 @@ from qgis.utils import iface
 from qgis import processing
 
 
-def createGrid(resolution, grid_path, extent,BarGridReceiver):
+def createGrid(resolution, grid_path, extent):
 
     # feedback configuration
     feedback = QgsProcessingFeedback()
-    feedback.progressChanged.connect(BarGridReceiver.setValue)
+    # feedback.progressChanged.connect(BarGridReceiver.setValue)
 
     # rename shape output in case already exists
     grid_path = removeLayer(grid_path)
@@ -302,6 +302,7 @@ def createRasterAndContour(resolution, layerTOrasterize_path, field, interval, c
     # feedback.setProgress(100)
     ProgressBarGrid.setValue(100)
     poly_output = result_poly['OUTPUT']
+    print('polgonize: ',result_poly['OUTPUT'])
 
     poly_name = os.path.splitext(
         os.path.basename(poly_path))[0]

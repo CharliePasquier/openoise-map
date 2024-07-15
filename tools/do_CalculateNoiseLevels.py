@@ -30,7 +30,8 @@ from qgis.PyQt.QtWidgets import QDialog
 #from qgis.core import *
 from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.PyQt.QtWidgets import QMessageBox
-from qgis.core import (QgsProject, QgsWkbTypes, QgsMapLayerProxyModel,QgsVectorFileWriter)
+from qgis.core import (QgsProject, QgsWkbTypes, QgsMapLayerProxyModel,
+                       QgsVectorFileWriter,NULL as qgisnull)
 try:
     from qgis.core import Qgis
 except ImportError:
@@ -108,7 +109,7 @@ class Dialog(QDialog,NoiseLevel_ui):
 
         self.sources_pts_pushButton.clicked.connect(self.sourcePts_show)
         self.sources_roads_pushButton.clicked.connect(self.sourceRoads_show)
-        # self.helpBuilding.cliFcked.connect(self.helpBuilding_show)
+        # self.helpBuilding.clicked.connect(self.helpBuilding_show)
         self.HelpParameters.clicked.connect(self.HelpParameters_show)
         self.helpCalculateOptions.clicked.connect(self.HelpCalculateOptions_show)
 
@@ -124,7 +125,7 @@ class Dialog(QDialog,NoiseLevel_ui):
         self.save_settings_checkBox.toggled.connect(self.save_settings_checkBox_update)
         self.save_settings_pushButton.clicked.connect(self.outFile_save_settings)
 
-        research_ray = ['50','100','250','500','1000']
+        research_ray = ['50','100','250','500','1000', '2000','3000','4000','5000']
         self.research_ray_comboBox.clear()
         for value in research_ray:
             self.research_ray_comboBox.addItem(value)
@@ -186,16 +187,16 @@ class Dialog(QDialog,NoiseLevel_ui):
         self.label_time_duration.setText('')
 
     # def helpBuilding_show(self):
-    #     QMessageBox.information(self, self.tr("opeNoise - Help"),
+    #     QMessageBox.information(self, self.tr("opeNoise Map - Help"),
     #                             self.tr("Buildings are considered as obstacles to the propagation, diffraction effects are taken into account"))
     def HelpParameters_show(self):
-        QMessageBox.information(self, self.tr("opeNoise - Help"), self.tr('''
+        QMessageBox.information(self, self.tr("opeNoise Map - Help"), self.tr('''
 <p><strong>Search ray: </strong>maximum distance of influence of the source to the receiver is expressed in meters. Receiver points beyond research ray return a -99 value. Setting a smaller search ray reduces the calculation time with consequent loss of precision in noise levels estimates.
 </p><p><strong>Lden definition: </strong>in accordance with Directive 2002/49/CE and regulations of each Country. The plugin automatically calculates the value of Lden when emission levels referred to the three reference periods are set (Day, Evening, Night).</p>
         '''))
 
     def HelpCalculateOptions_show(self):
-        QMessageBox.information(self, self.tr("opeNoise - Help"), self.tr('''
+        QMessageBox.information(self, self.tr("opeNoise Map - Help"), self.tr('''
         <p><strong>Skip Diffraction Calculation: </strong>the calculation will not take into account the diffraction of horizontal and vertical obstacles. This reduces the calculation time with consequent loss of precision in sound levels estimates. Receiver points beyond buildings return a -99 value.</p>
 <p><strong>Save Emission Level in Source Layer: </strong>allows you to save road emissions in the input layer.&nbsp; The results are expressed in dB(A).</p> 
 <p><strong>Save Current Settings: </strong>allows you to save all settings. Saved settings can be reloaded later in the start tab.</p>
@@ -204,7 +205,7 @@ class Dialog(QDialog,NoiseLevel_ui):
 
     def sourcePts_show(self):
         if self.sources_pts_layer_comboBox.currentText() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify points source layer"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify points source layer"))
             return False
         else:
             d = do_SourceDetailsPts.Dialog(self.iface, self.sources_pts_layer_comboBox.currentText())
@@ -216,7 +217,7 @@ class Dialog(QDialog,NoiseLevel_ui):
 
     def sourceRoads_show(self):
         if self.sources_roads_layer_comboBox.currentText() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify roads source layer"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify roads source layer"))
             return False
         else:
             d = do_SourceDetailsRoads.Dialog(self.iface, self.sources_roads_layer_comboBox.currentText())
@@ -285,7 +286,7 @@ class Dialog(QDialog,NoiseLevel_ui):
             self.sources_roads_pushButton.setEnabled(False)
 
         # if self.sources_pts_layer_checkBox.isChecked() and self.sources_roads_layer_checkBox.isChecked():
-        #     QMessageBox.warning(self, self.tr("opeNoise - Calculate Noise Levels"),
+        #     QMessageBox.warning(self, self.tr("opeNoise Map - Calculate Noise Levels"),
         #                             self.tr("Please select only one source layer: points or roads"))
 
 
@@ -332,11 +333,11 @@ class Dialog(QDialog,NoiseLevel_ui):
         nig_roads = False
 
         if self.sources_pts_layer_checkBox.isChecked():
-            if settings['period_pts_day'] == 'True':
+            if settings['period_pts_day'] == 'True' or settings['period_pts_day_freq'] == 'True':
                 day_pts = True
-            if settings['period_pts_eve'] == 'True':
+            if settings['period_pts_eve'] == 'True' or settings['period_pts_eve_freq'] == 'True':
                 eve_pts = True
-            if settings['period_pts_nig'] == 'True':
+            if settings['period_pts_nig'] == 'True' or settings['period_pts_nig_freq'] == 'True':
                 nig_pts = True
         if self.sources_roads_layer_checkBox.isChecked():
             if settings['period_roads_day'] == 'True':
@@ -493,81 +494,153 @@ class Dialog(QDialog,NoiseLevel_ui):
 
         # TAB Geometry
         if self.receivers_layer_comboBox.currentText() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify receiver points layer"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify receiver points layer"))
             return False
 
         if self.sources_pts_layer_checkBox.isChecked() is False and self.sources_roads_layer_checkBox.isChecked() is False:
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify at least one source layer"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify at least one source layer"))
             return False
 
         settings = on_Settings.getAllSettings()
 
         if self.sources_pts_layer_checkBox.isChecked():
             if self.sources_pts_layer_comboBox.currentText() == "":
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify the points sources layer"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify the points sources layer"))
                 return False
-            if not (settings['period_pts_gen'] == 'True' or settings['period_pts_day'] == 'True' or settings['period_pts_eve'] == 'True' or settings['period_pts_nig'] == 'True'):
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify at least one power for a reference period in the point source"))
+            if not (settings['period_pts_gen'] == 'True' or settings['period_pts_day'] == 'True' or settings['period_pts_eve'] == 'True' or settings['period_pts_nig'] == 'True' or
+                    settings['period_pts_gen_freq'] == 'True' or settings['period_pts_day_freq'] == 'True' or settings['period_pts_eve_freq'] == 'True'or settings['period_pts_nig_freq'] == 'True') :
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify at least one power for a reference period in the point source"))
                 return False
             if self.receivers_layer_comboBox.currentText() == self.sources_pts_layer_comboBox.currentText():
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("The receivers point layer and the source point layer are the same"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("The receivers point layer and the source point layer are the same"))
                 return False
+
+        numZeros=0
+        numNulls=0
+        if self.sources_pts_layer_checkBox.isChecked() and self.sources_pts_layer_comboBox.currentText() != "":
+            self.sources_pts_layer = \
+            QgsProject.instance().mapLayersByName(self.sources_pts_layer_comboBox.currentText())[0]
+            for feat in self.sources_pts_layer.getFeatures():
+                # check for overall zeroes and nulls
+                if settings['period_pts_gen'] == 'True':
+                    if feat[settings['POWER_P_gen']] ==0:
+                        numZeros+=1
+                    if feat[settings['POWER_P_gen']] == qgisnull:
+                        numNulls+=1
+                if settings['period_pts_day'] == 'True':
+                    if feat[settings['POWER_P_day']] ==0:
+                        numZeros+=1
+                    if feat[settings['POWER_P_day']] == qgisnull:
+                        numNulls+=1
+                if settings['period_pts_eve'] == 'True':
+                    if feat[settings['POWER_P_eve']] ==0:
+                        numZeros+=1
+                    if feat[settings['POWER_P_eve']] == qgisnull:
+                        numNulls+=1
+                if settings['period_pts_nig'] == 'True':
+                    if feat[settings['POWER_P_nig']] ==0:
+                        numZeros+=1
+                    if feat[settings['POWER_P_nig']] == qgisnull:
+                        numNulls+=1
+                # check for bands zeroes and nulls
+                bands= ['63','125','250','500','1000','2000','4000','8000']
+                if settings['period_pts_gen_freq'] == 'True':
+                    for band in bands:
+                        if feat[settings['POWER_P_GEN_'+band]] == 0:
+                            numZeros += 1
+                        if feat[settings['POWER_P_GEN_'+band]] == qgisnull:
+                            numNulls += 1
+                if settings['period_pts_day_freq'] == 'True':
+                    for band in bands:
+                        if feat[settings['POWER_P_DAY_'+band]] == 0:
+                            numZeros += 1
+                        if feat[settings['POWER_P_DAY_'+band]] == qgisnull:
+                            numNulls += 1
+                if settings['period_pts_eve_freq'] == 'True':
+                    for band in bands:
+                        if feat[settings['POWER_P_EVE_'+band]] == 0:
+                            numZeros += 1
+                        if feat[settings['POWER_P_EVE_'+band]] == qgisnull:
+                            numNulls += 1
+                if settings['period_pts_nig_freq'] == 'True':
+                    for band in bands:
+                        if feat[settings['POWER_P_NIG_'+band]] == 0:
+                            numZeros += 1
+                        if feat[settings['POWER_P_NIG_'+band]] == qgisnull:
+                            numNulls += 1
+
+            # show warnings
+            if numNulls > 0:
+                reply = QMessageBox.question(self, self.tr("opeNoise Map - Calculate Noise Levels"),
+                                        self.tr("<b>Null values</b>  are present in the attribute table of the point source vector layer."
+                                                "\n These values may be missing. Do you want to proceed with the operation?"),
+                                     QMessageBox.Yes,QMessageBox.No)
+                if reply == QMessageBox.No:
+                    return False
+
+            if numZeros > 0:
+                reply = QMessageBox.question(self, self.tr("opeNoise Map - Calculate Noise Levels"),
+                                        self.tr("<b>Zeroes values</b> are present in the attribute table of the point source vector layer."
+                                                "\n These values may be missing. Do you want to proceed with the operation?"),
+                                     QMessageBox.Yes,QMessageBox.No)
+                if reply == QMessageBox.No:
+                    return False
 
         if self.sources_roads_layer_checkBox.isChecked():
             if self.sources_roads_layer_comboBox.currentText() == "":
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify the road source layer"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify the road source layer"))
                 return False
             if not (settings['period_roads_gen'] == 'True' or settings['period_roads_day'] == 'True' or settings['period_roads_eve'] == 'True' or settings['period_roads_nig'] == 'True'):
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify at least one power for a reference period in the road source"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify at least one power for a reference period in the road source"))
                 return False
 
         if self.height_receiver_check.isChecked() and self.field_height_receiver.currentText() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"),
-                                    self.tr("Please specify elevation field for receiver points layer"))
+            QMessageBox.information(self, self.tr("opeNoise map - Calculate Noise Levels"),
+                                    self.tr("Please specify the field containing elevation for receiver points"))
             return False
 
         if self.height_building_check.isChecked() and self.field_height_building.currentText() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"),
-                                    self.tr("Please specify elevation field for buildings layer"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"),
+                                    self.tr("Please specify the field containing elevation for buildings"))
             return False
 
 
         if self.buildings_layer_checkBox.isChecked() == True and self.buildings_layer_comboBox.currentText() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify the buildings layer"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify the buildings layer"))
             return False
 
 
         ## TAB Option
         if self.save_settings_checkBox.isChecked() and self.save_settings_lineEdit.text() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify a file to save current settings"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify a file to save current settings"))
             return False
 
         if  self.L_den_checkBox.isChecked() and int(self.L_day_hours_spinBox.value()) + int(self.L_eve_hours_spinBox.value()) + int(self.L_nig_hours_spinBox.value()) != 24:
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("In the Parameters section, to calculate Lden, the total amount of the hours of day, evening and night period must be 24"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("In the Parameters section, to calculate Lden, the total amount of the hours of day, evening and night period must be 24"))
             return False
 
 
         if self.rays_layer_checkBox.isChecked() == True and self.rays_layer_lineEdit.text() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify the direct sound rays layer"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify the direct sound rays layer"))
             return False
 
         if self.diff_rays_layer_checkBox.isChecked() == True and self.diff_rays_layer_lineEdit.text() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify the diffracted vertical sound rays layer"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify the diffracted vertical sound rays layer"))
             return False
 
         # check that 3d diffraction is activated when diffracted layers are outputted
         if self.diff3DRaysCheck.isChecked() == True and self.diff3D_rays_layer_lineEdit.text() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"),
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"),
                                     self.tr("Please specify the diffracted horizontal sound rays layer"))
             return False
         if self.diff3DRaysCheck.isChecked() == True and self.height_building_check.isChecked() == False:
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"),
-                                    self.tr("Please activate the 3D global in Input tab"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"),
+                                    self.tr("Please activate 3D calculation in Input menu"))
             return False
 
         if self.diff_rays_layer_checkBox.isChecked() == True and self.rays_layer_checkBox.isChecked() == True:
             if self.diff_rays_layer_lineEdit.text() == self.rays_layer_lineEdit.text():
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"),
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"),
                                         self.tr("Please use different name for the diffracted and rays layer"))
                 return False
 
@@ -588,13 +661,13 @@ class Dialog(QDialog,NoiseLevel_ui):
         fields_to_calculate = []
 
         if self.sources_pts_layer_checkBox.isChecked():
-            if settings['period_pts_gen'] == 'True':
+            if settings['period_pts_gen'] == 'True' or settings['period_pts_gen_freq'] == 'True':
                 fields_to_calculate.append('Lgeneric')
-            if settings['period_pts_day'] == 'True':
+            if settings['period_pts_day'] == 'True' or settings['period_pts_day_freq'] == 'True':
                 fields_to_calculate.append('Lday')
-            if settings['period_pts_eve'] == 'True':
+            if settings['period_pts_eve'] == 'True' or settings['period_pts_eve_freq'] == 'True':
                 fields_to_calculate.append('Levening')
-            if settings['period_pts_nig'] == 'True':
+            if settings['period_pts_nig'] == 'True' or settings['period_pts_nig_freq'] == 'True':
                 fields_to_calculate.append('Lnight')
 
         if self.sources_roads_layer_checkBox.isChecked():
@@ -614,12 +687,12 @@ class Dialog(QDialog,NoiseLevel_ui):
         #personal_fields = ['Lgeneric', 'Lday', 'Levening', 'Lnight','Lden']
         fields_already_present = list(set(fields_to_calculate) & set(fields))
         if fields_already_present:
-            overwrite_begin = self.tr("In the receivers point layer the following fields already exist: ")
+            overwrite_begin = self.tr("In  the receiver points layer the following sound levels already exist: ")
             overwrite_end = self.tr(" . Do you want to overwrite them?")
-            reply = QMessageBox.question(self, self.tr("opeNoise - Calculate Noise Levels"),
+            reply = QMessageBox.question(self, self.tr("opeNoise Map - Calculate Noise Levels"),
                                            overwrite_begin + '\n' + str(fields_already_present) + overwrite_end, QMessageBox.Yes, QMessageBox.No)
             if reply == QMessageBox.No:
-                reply2 = QMessageBox.question(self, self.tr("opeNoise - Calculate Noise Levels"),
+                reply2 = QMessageBox.question(self, self.tr("opeNoise Map - Calculate Noise Levels"),
                                                self.tr("To mantain old data, copy them in a new field"), QMessageBox.Ok)
                 return False
             else:
@@ -643,40 +716,147 @@ class Dialog(QDialog,NoiseLevel_ui):
             self.sources_pts_layer = QgsProject.instance().mapLayersByName(self.sources_pts_layer_comboBox.currentText())[0]
             # check that is used a projected CRS
             if self.sources_pts_layer.crs().isGeographic():
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr(
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
                     "The source layer have to use a projected CRS (Coordinate Reference System)"))
                 return False
 
             if self.sources_pts_layer.crs().authid() != self.receiver_layer.crs().authid():
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("The receivers and the points sources layers don't have the same CRS (Coordinate Reference System). Please use layers with same CRS"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("The receivers and the points sources layers don't have the same CRS (Coordinate Reference System). Please use layers with same CRS"))
                 return False
 
         if self.sources_roads_layer_checkBox.isChecked() and self.sources_roads_layer_comboBox.currentText() != "":
             self.sources_roads_layer = QgsProject.instance().mapLayersByName(self.sources_roads_layer_comboBox.currentText())[0]
 
             if self.sources_roads_layer.crs().isGeographic():
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr(
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
                     "The source layer have to use a projected CRS (Coordinate Reference System)"))
                 return False
 
             if self.sources_roads_layer.crs().authid() != self.receiver_layer.crs().authid():
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("The receivers and the road sources layers don't have the same CRS (Coordinate Reference System). Please use layers with same CRS"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("The receivers and the road sources layers don't have the same CRS (Coordinate Reference System). Please use layers with same CRS"))
                 return False
 
         if self.buildings_layer_checkBox.isChecked() and self.buildings_layer_comboBox.currentText() != "":
             self.buildings_layer = QgsProject.instance().mapLayersByName(self.buildings_layer_comboBox.currentText())[0]
 
             if self.buildings_layer.crs().isGeographic():
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr(
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
                     "The building layer have to use a projected CRS (Coordinate Reference System)"))
                 return False
 
             if self.receiver_layer.crs().authid() != self.buildings_layer.crs().authid():
-                QMessageBox.information(self, self.tr("opeNoise - Road Source Calculation"), self.tr("The receivers and buildings layers don't have the same CRS (Coordinate Reference System). Please use layers with same CRS"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Road Source Calculation"), self.tr("The receivers and buildings layers don't have the same CRS (Coordinate Reference System). Please use layers with same CRS"))
                 return False
 
         return True
 
+    def multipartCheckESRI(self,layer):
+        features = layer.getFeatures()
+
+        countfeature = 0
+        countgeometry = 0
+
+        for feature in features:
+            countfeature += 1
+            # retrieve every feature with its geometry and attributes
+
+            # fetch geometry
+            # show some information about the feature geometry
+            geom = feature.geometry()
+            geomSingleType = QgsWkbTypes.isSingleType(geom.wkbType())
+            if geom.type() == QgsWkbTypes.PointGeometry:
+                # the geometry type can be of single or multi type
+                if geomSingleType:
+                    countgeometry += 1
+                else:
+                    x = geom.asPoint()
+                    # print("MultiPoint: ", x)
+                    countgeometry += len(x)
+
+            elif geom.type() == QgsWkbTypes.LineGeometry:
+                if geomSingleType:
+
+                    countgeometry += 1
+                else:
+                    x = geom.asMultiPolyline()
+                    # print("MultiLine: ", x, "length: ", geom.length())
+                    countgeometry += len(x)
+
+            elif geom.type() == QgsWkbTypes.PolygonGeometry:
+                if geomSingleType:
+
+                    countgeometry += 1
+                else:
+                    x = geom.asMultiPolygon()
+                    # print("MultiPolygon: ", x, "Area: ", geom.area())
+                    isMultipartEsri = True
+                    countgeometry += len(x)
+
+        print('countfeature: ',countfeature)
+        print('countgeometry: ',countgeometry)
+        if countfeature == countgeometry:
+            isMultipartEsri = False
+        else:
+            isMultipartEsri = True
+        return isMultipartEsri
+
+    def checkMultipart(self):
+        # check input data are not multipart
+        # # POINT LAYER
+
+        receiver_layer = self.receivers_layer_comboBox.currentLayer()
+        if QgsWkbTypes.isMultiType(receiver_layer.wkbType()):
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
+                """The receiver points layer is a <b>MultiPart</b>, the plugin does not support these types of layers. 
+                To convert a multipart layer to single parts, use the specific QGIS tool: Vector -> Geometry Tools -> Multipart to Singleparts"""))
+            return False
+
+        if self.sources_pts_layer_checkBox.isChecked() == True:
+            source_point_layer = self.sources_pts_layer_comboBox.currentLayer()
+            if QgsWkbTypes.isMultiType(source_point_layer.wkbType()):
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
+                    """The sources points layer is a <b>MultiPart</b>, the plugin does not support these types of layers. 
+                    To convert a multipart layer to single parts, use the specific QGIS tool: Vector -> Geometry Tools -> Multipart to Singleparts
+                    """))
+                return False
+
+        # POLYGON LAYER
+        if self.buildings_layer_checkBox.isChecked():
+            building_layer = self.buildings_layer_comboBox.currentLayer()
+            if building_layer.storageType() == 'ESRI Shapefile':
+                if self.multipartCheckESRI(building_layer):
+                    QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("""
+                    The buildings layer is a <b>MultiPart</b>, the plugin does not support these types of layers. 
+                    To convert a multipart layer to single parts, use the specific QGIS tool: Vector -> Geometry Tools -> Multipart to Singleparts
+                        """))
+                    return False
+            else:
+                if QgsWkbTypes.isMultiType(building_layer.wkbType()):
+                    QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
+                        """The buildings layer is a <b>MultiPart</b>, the plugin does not support these types of layers. 
+                        To convert a multipart layer to single parts, use the specific QGIS tool: Vector -> Geometry Tools -> Multipart to Singleparts
+                        """))
+                    return False
+
+        # LINE LAYER
+        if self.sources_roads_layer_checkBox.isChecked() == True:
+            source_road_layer = self.sources_roads_layer_comboBox.currentLayer()
+            if source_road_layer.storageType() == 'ESRI Shapefile':
+                if self.multipartCheckESRI(source_road_layer):
+                    QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("""
+                        The roads layer is a <b>MultiPart</b>, the plugin does not support these types of layers. 
+                        To convert a multipart layer to single parts, use the specific QGIS tool: Vector -> Geometry Tools -> Multipart to Singleparts
+                         """))
+                    return False
+            else:
+                if QgsWkbTypes.isMultiType(source_road_layer.wkbType()):
+                    QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
+                        """The roads layer is a <b>MultiPart</b>, the plugin does not support these types of layers. 
+                        To convert a multipart layer to single parts, use the specific QGIS tool: Vector -> Geometry Tools -> Multipart to Singleparts
+                        """))
+                    return False
+
+        return True
 
     def write_settings(self):
 
@@ -908,7 +1088,7 @@ class Dialog(QDialog,NoiseLevel_ui):
                 self.diff3D_rays_layer_lineEdit.clear()
 
         except:
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Sorry, but somethigs wrong in import last settings"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Sorry, but somethigs wrong in import last settings"))
 
 
     def reload_last_settings(self):
@@ -929,7 +1109,7 @@ class Dialog(QDialog,NoiseLevel_ui):
             self.reload_settings()
 
         except:
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Sorry, but somethigs wrong in import saved settings"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Sorry, but somethigs wrong in import saved settings"))
 
     def save_settings_checkBox_update(self):
 
@@ -971,12 +1151,21 @@ class Dialog(QDialog,NoiseLevel_ui):
 
     def duration(self):
         duration = self.time_end - self.time_start
-        duration_h = duration.seconds // 3600
-        duration_m = (duration.seconds // 60) % 60
-        duration_s = duration.seconds
-        duration_string = str(format(duration_h, '02')) + ':' + str(format(duration_m, '02')) + ':' + str(
-            format(duration_s, '02'))
-        return duration_string
+        giorni = duration.days
+        ore, remainder = divmod(duration.seconds, 3600)
+        minuti, secondi = divmod(remainder, 60)
+        # Costruzione della stringa di output
+        tempo_intercorso = ""
+        if giorni > 0:
+            tempo_intercorso += f"{giorni} d - "
+        tempo_intercorso += f"{ore} h - {minuti} m - {secondi+1} s"
+        # old method to define duration
+        # duration_h = duration.seconds // 3600
+        # duration_m = (duration.seconds // 60) % 60
+        # duration_s = duration.seconds
+        # duration_string = str(format(duration_h, '02')) + ':' + str(format(duration_m, '02')) + ':' + str(
+        #     format(duration_s, '02'))
+        return tempo_intercorso
 
 
 
@@ -986,6 +1175,9 @@ class Dialog(QDialog,NoiseLevel_ui):
             return
 
         if self.CRS_check() == False:
+            return
+
+        if self.checkMultipart() == False:
             return
 
         if self.diff_rays_layer_checkBox.isChecked():
@@ -1029,7 +1221,7 @@ class Dialog(QDialog,NoiseLevel_ui):
                             self.tr("Start: ") + self.time_start.strftime("%a %d/%b/%Y %H:%M:%S") + "\n" +\
                             self.tr("End: ") + self.time_end.strftime("%a %d/%b/%Y %H:%M:%S") + "\n"+\
                             self.tr("Duration: ") + str(self.duration())
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), result_string)
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), result_string)
 
         else:
 
@@ -1039,7 +1231,7 @@ class Dialog(QDialog,NoiseLevel_ui):
                             self.tr("Start: ") + self.time_start.strftime("%a %d/%b/%Y %H:%M:%S.%f") + "\n" +\
                             self.tr("End: ") + self.time_end.strftime("%a %d/%b/%Y %H:%M:%S.%f") + "\n"+\
                             self.tr("Duration: ") + str(self.duration())
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr(result_string))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(result_string))
 
         # fix_print_with_import
         print(self.duration())

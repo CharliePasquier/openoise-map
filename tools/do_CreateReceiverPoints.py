@@ -103,10 +103,11 @@ class Dialog(QDialog,FORM_CLASS):
 
         self.progressBar.setValue(0)
 
-        spacing = ['5', '10', '20', '30', '40', '50']
+        spacing = ['1','2','3','4','5', '10', '20', '30', '40', '50']
         self.resolution_comboBox.clear()
         for space in spacing:
             self.resolution_comboBox.addItem(space)
+        # self.resolution_comboBox.setCurrentIndex(4)
     
     def populateLayers( self ):
         if Qgis.QGIS_VERSION_INT < 31401:
@@ -121,7 +122,7 @@ class Dialog(QDialog,FORM_CLASS):
     #     self.BuildingMaskLayerCombo.setFilters(QgsMapLayerProxyModel.PolygonLayer)
 
     def infoReceivers_show(self):
-        QMessageBox.information(self, self.tr("opeNoise - Help"), self.tr('''
+        QMessageBox.information(self, self.tr("opeNoise Map - Help"), self.tr('''
          <p><strong>Create Receiver Points: </strong>By default, level calculations are performed 4m above the ground.  
          After creating the receivers, you can add a new attribute with a numeric field of a height other than 4m. 
          In the Calculate Noise Levels tool, you can activate the custom height of the receivers. 
@@ -129,7 +130,7 @@ class Dialog(QDialog,FORM_CLASS):
          '''))
 
     def infoGrid_show(self):
-        QMessageBox.information(self, self.tr("opeNoise - Help"), self.tr('''
+        QMessageBox.information(self, self.tr("opeNoise Map - Help"), self.tr('''
          <p><strong>Create Grid Points: </strong>By default, level calculations are performed 4m above the ground.  
          After creating the receivers, you can add a new attribute with a numeric field of a height other than 4m. 
          In the Calculate Noise Levels tool, you can activate the custom height of the receivers. 
@@ -138,8 +139,12 @@ class Dialog(QDialog,FORM_CLASS):
          '''))
 
     def extent_layer_definition2(self):
-        extent = self.iface.mapCanvas().extent()
-        self.ExtentGrid.setCurrentExtent(extent,QgsCoordinateReferenceSystem("EPSG:3003"))
+        canvas = self.iface.mapCanvas()
+        canvas_extent = canvas.extent()
+        self.ExtentGrid.setOriginalExtent(canvas_extent,canvas.mapSettings().destinationCrs())
+        self.ExtentGrid.setCurrentExtent( canvas_extent,  QgsCoordinateReferenceSystem('EPSG:3857')  )
+        self.ExtentGrid.setOutputCrs(QgsCoordinateReferenceSystem('EPSG:3857'))
+        # self.ExtentGrid.setCurrentExtent(canvas_extent,QgsCoordinateReferenceSystem("EPSG:3003"))
 
     def outputFile_grid(self):
 
@@ -224,12 +229,17 @@ class Dialog(QDialog,FORM_CLASS):
     def accept(self):
       
         self.buttonBox.setEnabled( False )
+
+        # check multipart for building layer
+        if self.checkMultipart() == False:
+            return
+
         if self.buildings_layer_comboBox.currentText() == "":
-            QMessageBox.information(self, self.tr("opeNoise - Create Receiver or Grid Points"), self.tr("Please specify buildings layer"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Create Receiver or Grid Points"), self.tr("Please specify buildings layer"))
             self.buttonBox.setEnabled( True )
             return
         elif self.receiver_layer_lineEdit.text() == "" or self.receiver_layer_lineEdit.text() == ".shp":
-            QMessageBox.information(self, self.tr("opeNoise - Create Receiver or Grid Points"), self.tr("Please specify output receiver points layer"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Create Receiver or Grid Points"), self.tr("Please specify output receiver points layer"))
             
             self.buttonBox.setEnabled( True )
             return
@@ -237,6 +247,16 @@ class Dialog(QDialog,FORM_CLASS):
             
             #buildings_layer = QgsProject.instance().mapLayersByName(self.buildings_layer_comboBox.currentText())[0]
             buildings_layer = self.buildings_layer_comboBox.currentLayer()
+            if self.selected_receivers.isChecked():
+                if  buildings_layer.selectedFeatureCount() == 0:
+                    QMessageBox.information(self, self.tr("opeNoise Map - Create Receiver or Grid Points"),
+                                            self.tr("Please select at least one feature in building layer"))
+                    ID_selected_receiver = []
+                else:
+                    ID_selected_receiver= buildings_layer.selectedFeatureIds()
+            else:
+                ID_selected_receiver = list()
+
             buildings_layer_path = buildings_layer.source()
             receiver_points_layer_path = self.receiver_layer_lineEdit.text()
             
@@ -253,12 +273,14 @@ class Dialog(QDialog,FORM_CLASS):
                 # CreateReceiverPoints
             
                 if self.middle_pts_radioButton.isChecked():
-                    on_CreateReceiverPoints.middle(bar,buildings_layer_path,receiver_points_layer_path)
+                    on_CreateReceiverPoints.middle(bar,buildings_layer_path,receiver_points_layer_path,ID_selected_receiver)
+                # metodo rimosso dalla GUI
                 if self.spaced_pts_radioButton.isChecked():
                     spaced_pts_distance = float(self.spaced_pts_comboBox.currentText())
                     on_CreateReceiverPoints.spaced(bar,buildings_layer_path,receiver_points_layer_path,spaced_pts_distance)
+
                 if self.case2b_radioButton.isChecked():
-                    on_CreateReceiverPoints.case2b(bar,buildings_layer_path,receiver_points_layer_path)
+                    on_CreateReceiverPoints.case2b(bar,buildings_layer_path,receiver_points_layer_path,ID_selected_receiver)
 
                 run = 1
 
@@ -276,7 +298,7 @@ class Dialog(QDialog,FORM_CLASS):
                                 self.tr("End: ") + self.time_end.strftime("%a %d/%b/%Y %H:%M:%S") + "\n"+\
                                 self.tr("Duration: ") + str(self.duration())
 
-                QMessageBox.information(self, self.tr("opeNoise - Create Receiver or Grid Points"), result_string)
+                QMessageBox.information(self, self.tr("opeNoise Map - Create Receiver or Grid Points"), result_string)
             else:
                 result_string = self.tr("Sorry, process not complete.") + "\n\n" +\
                                 self.tr("View the log file to understand the problem:") + "\n" +\
@@ -285,7 +307,7 @@ class Dialog(QDialog,FORM_CLASS):
                                 self.tr("End: ") + self.time_end.strftime("%a %d/%b/%Y %H:%M:%S.%f") + "\n"+\
                                 self.tr("Duration: ") + str(self.duration())
                                 
-                QMessageBox.information(self, self.tr("opeNoise - Create Receiver or Grid Points"), self.tr(result_string))
+                QMessageBox.information(self, self.tr("opeNoise Map - Create Receiver or Grid Points"), self.tr(result_string))
                 
                 self.buttonBox.setEnabled( True )
 
@@ -300,34 +322,60 @@ class Dialog(QDialog,FORM_CLASS):
         
     def duration(self):
         duration = self.time_end - self.time_start
-        duration_h = duration.seconds // 3600
-        duration_m = (duration.seconds // 60) % 60
-        duration_s = duration.seconds
-        duration_string = str(format(duration_h, '02')) + ':' + str(format(duration_m, '02')) + ':' + str(
-            format(duration_s, '02'))
-        return duration_string
+        giorni = duration.days
+        ore, remainder = divmod(duration.seconds, 3600)
+        minuti, secondi = divmod(remainder, 60)
+        # Costruzione della stringa di output
+        tempo_intercorso = ""
+        if giorni > 0:
+            tempo_intercorso += f"{giorni} d - "
+        tempo_intercorso += f"{ore} h - {minuti} m - {secondi + 1} s"
+        # old method to define duration
+        # duration_h = duration.seconds // 3600
+        # duration_m = (duration.seconds // 60) % 60
+        # duration_s = duration.seconds
+        # duration_string = str(format(duration_h, '02')) + ':' + str(format(duration_m, '02')) + ':' + str(
+        #     format(duration_s, '02'))
+        return tempo_intercorso
+
+    def checkMultipart(self):
+        building_layer = self.buildings_layer_comboBox.currentLayer()
+        warning_message = """The buildings layer is a <b>MultiPart</b>, the plugin does not support these types of layers. 
+                    To convert a multipart layer to single parts, use the specific QGIS tool: Vector -> Geometry Tools -> Multipart to Singleparts
+                    """
+        if building_layer.storageType() == 'ESRI Shapefile':
+            if self.multipartCheck(building_layer):
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(warning_message))
+                return False
+        else:
+            if QgsWkbTypes.isMultiType(building_layer.wkbType()):
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
+                    warning_message))
+                return False
+
+        return True
 
     def runGrid(self):
 
         # check that CRS in projected
         project = QgsProject.instance()
         if project.crs().isGeographic():
-            QMessageBox.information(self, self.tr("opeNoise - Create Receiver or Grid Points"), self.tr(
+            QMessageBox.information(self, self.tr("opeNoise Map - Create Receiver or Grid Points"), self.tr(
                 "The project have to use a projected CRS (Coordinate Reference System)."))
             return
 
         # progressbar Grid Point
-        BarGridReceiver = self.progressBarGridReceiver
-        BarGridReceiver.setMaximum(100)
+        # BarGridReceiver = self.progressBarGridReceiver
+        # BarGridReceiver.setMaximum(100)
 
         extentSelected = self.ExtentGrid.outputExtent()
         if extentSelected.area() == 0:
-            QMessageBox.information(self, self.tr("opeNoise - Create Receiver or Grid Points"),
+            QMessageBox.information(self, self.tr("opeNoise Map - Create Receiver or Grid Points"),
                                     self.tr("Please specify extension layer"))
             return
 
         if self.gridpoint_lineEdit.text()== "" or self.gridpoint_lineEdit.text() == ".shp":
-            QMessageBox.information(self, self.tr("opeNoise - Create Receiver or Grid Points"),
+            QMessageBox.information(self, self.tr("opeNoise Map - Create Receiver or Grid Points"),
                                     self.tr("Please specify output grid points layer"))
             return
 
@@ -342,7 +390,7 @@ class Dialog(QDialog,FORM_CLASS):
         grid_path = self.gridpoint_lineEdit.text()
 
         if grid_path == "":
-            QMessageBox.information(self, self.tr("opeNoise - Apply Noise Symbology"),
+            QMessageBox.information(self, self.tr("opeNoise Map - Apply Noise Symbology"),
                                     self.tr("Please specify the output grid vector layer"))
             return 0
 
@@ -353,12 +401,61 @@ class Dialog(QDialog,FORM_CLASS):
             resolution,
             grid_path,
             extentSelected,
-            BarGridReceiver,
+            # BarGridReceiver,
 
         )
 
         self.close()
 
     
+    def multipartCheck(self,layer):
+        features = layer.getFeatures()
+
+        countfeature = 0
+        countgeometry = 0
+
+        for feature in features:
+            countfeature += 1
+            # retrieve every feature with its geometry and attributes
+
+            # fetch geometry
+            # show some information about the feature geometry
+            geom = feature.geometry()
+            geomSingleType = QgsWkbTypes.isSingleType(geom.wkbType())
+            if geom.type() == QgsWkbTypes.PointGeometry:
+                # the geometry type can be of single or multi type
+                if geomSingleType:
+                    countgeometry += 1
+                else:
+                    x = geom.asPoint()
+                    # print("MultiPoint: ", x)
+                    countgeometry += len(x)
+
+            elif geom.type() == QgsWkbTypes.LineGeometry:
+                if geomSingleType:
+
+                    countgeometry += 1
+                else:
+                    x = geom.asMultiPolyline()
+                    # print("MultiLine: ", x, "length: ", geom.length())
+                    countgeometry += len(x)
+
+            elif geom.type() == QgsWkbTypes.PolygonGeometry:
+                if geomSingleType:
+
+                    countgeometry += 1
+                else:
+                    x = geom.asMultiPolygon()
+                    # print("MultiPolygon: ", x, "Area: ", geom.area())
+                    isMultipartEsri = True
+                    countgeometry += len(x)
+
+        print('countfeature: ',countfeature)
+        print('countgeometry: ',countgeometry)
+        if countfeature == countgeometry:
+            isMultipartEsri = False
+        else:
+            isMultipartEsri = True
+        return isMultipartEsri
 
     

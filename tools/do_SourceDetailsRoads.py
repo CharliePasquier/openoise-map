@@ -254,7 +254,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 
     def HelpNMPB_show(self):
 
-        QMessageBox.information(self, self.tr("opeNoise - Help"), self.tr('''
+        QMessageBox.information(self, self.tr("opeNoise Map - Help"), self.tr('''
         <p><strong>Sound Emission level – dB(A):</strong> Sound emission level expressed in dB(A) corresponding to the Laeq(1h) 
         measured at a height of 10 meters above the ground, 30 meters away from the border of an infinitely long straight road placed directly on the ground, 28 meters wide, produced by the passage of vehicles at a given speed for propagation without obstacles on a perfectly reflecting flat surface</p>
         '''))
@@ -284,18 +284,18 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 <tbody>
 <tr>
 <td style="text-align: center;" width="79" height="10">
-<p><span lang="en-US"><strong>Id</strong></span></p>
+<p><span lang="en-US">Id</span></p>
 </td>
 <td style="text-align: center;" width="320">
-<p><span lang="en-US"><strong>Road Surface Categories</strong></span></p>
+<p><span lang="en-US">Road Surface Categories</span></p>
 </td>
 <td style="text-align: center;" colspan="3" width="199">
-<p><span lang="en-US"><strong>Noise Level Correction</strong></span></p>
+<p><span lang="en-US">Noise Level Correction</span></p>
 </td>
 </tr>
 <tr>
 <td style="text-align: center;" rowspan="2" width="79" height="12">
-<p><span lang="en-US">porous</span></p>
+<p><span lang="en-US"><strong>porous</strong></span></p>
 </td>
 <td style="text-align: center;" rowspan="2" width="320">
 <p><span lang="en-US">Porous Surface</span></p>
@@ -323,7 +323,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 </tr>
 <tr>
 <td style="text-align: center;" width="79">
-<p><span lang="en-US">smooth</span></p>
+<p><span lang="en-US"><strong>smooth</strong></span></p>
 </td>
 <td style="text-align: center;" width="320">
 <p><span lang="en-US">Smooth asphalt (concrete or mastic)</span></p>
@@ -334,7 +334,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 </tr>
 <tr>
 <td style="text-align: center;" width="79">
-<p><span lang="en-US">cement</span></p>
+<p><span lang="en-US"><strong>cement</strong></span></p>
 </td>
 <td style="text-align: center;" width="320">
 <p><span lang="en-US">Cement concrete</span></p>
@@ -345,7 +345,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 </tr>
 <tr>
 <td style="text-align: center;" width="79">
-<p><span lang="en-US">corrugated</span></p>
+<p><span lang="en-US"><strong>corrugated</strong></span></p>
 </td>
 <td style="text-align: center;" width="320">
 <p><span lang="en-US">Corrugated asphalt</span></p>
@@ -356,7 +356,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 </tr>
 <tr>
 <td style="text-align: center;" width="79">
-<p><span lang="en-US">stones</span></p>
+<p><span lang="en-US"><strong>stones</strong></span></p>
 </td>
 <td style="text-align: center;" width="320">
 <p><span lang="en-US">Paving stones</span></p>
@@ -959,7 +959,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
         for comboBox in self.all_emission_comboBoxes:
 
             if comboBox.isEnabled() == True and comboBox.currentText() == "":
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please select a field"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please select a field"))
                 return False
 
 
@@ -970,7 +970,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
                 if comboBox.isEnabled():
                     count = 1
             if count == 0:
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify at least one power for a reference period"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify at least one power for a reference period"))
                 return False
 
         if self.NMPB_radioButton.isChecked():
@@ -993,7 +993,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 #                            count = 1
 #                        else:
                         if not test[0]:
-                            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr(
+                            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
                                 "Error in NMPB Traffic type: ") +'\n'+ test[1])
                             return False
                     # check on Slope type NMBP
@@ -1005,7 +1005,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 #                            count = 1
 #                        else:
                         if not test[0]:
-                            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr(
+                            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
                                 "Error in NMPB Slope type: ") +'\n'+  test[1])
                             return False
 
@@ -1018,13 +1018,13 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 #                            count = 1
 #                        else:
                         if not test[0]:
-                            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr(
+                            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
                                 "Error in NMPB Surface type: ") + '\n' + test[1])
                             return False
 
 
             if count == 0:
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify at least one type of vehicle and reference period"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify at least one type of vehicle and reference period"))
                 return False
 
 
@@ -1052,11 +1052,11 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 #                            count = 1
 #                        else:
                         if not test[0]:
-                            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr(
+                            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr(
                                 "Error in CNOSSOS Surface  type: ") +'\n'+ test[1])
                             return False
             if count == 0:
-                QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Please specify at least one type of vehicle and reference period"))
+                QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Please specify at least one type of vehicle and reference period"))
                 return False
 
 
@@ -1193,7 +1193,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
             self.source_checkBox_update()
 
         except:
-            QMessageBox.information(self, self.tr("opeNoise - Calculate Noise Levels"), self.tr("Sorry, but somethigs wrong importing last settings"))
+            QMessageBox.information(self, self.tr("opeNoise Map - Calculate Noise Levels"), self.tr("Sorry, but somethigs wrong importing last settings"))
 
 
     def accept(self):
@@ -1212,7 +1212,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 class ScrollMessageBox(QMessageBox):
    def __init__(self, l, *args, **kwargs):
       QMessageBox.__init__(self, *args, **kwargs)
-      QMessageBox.setWindowTitle(self,self.tr("opeNoise - Help CNOSSOS"))
+      QMessageBox.setWindowTitle(self,self.tr("opeNoise Map - Help CNOSSOS"))
       scroll = QScrollArea(self)
       scroll.setWidgetResizable(True)
       self.content = QWidget()

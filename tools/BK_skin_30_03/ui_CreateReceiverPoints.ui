@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>486</height>
+    <height>440</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,7 +38,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>opeNoise Map - Create Receiver or Grid Points</string>
+   <string>opeNoise - Create receiver or grid points</string>
   </property>
   <property name="locale">
    <locale language="Italian" country="Italy"/>
@@ -63,7 +63,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Receiver Points</string>
+       <string>Receivers</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -80,7 +80,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;1)&lt;/span&gt; Buildings Layer (input polygon layer)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Buildings layer (input polygon layer)</string>
            </property>
           </widget>
          </item>
@@ -90,42 +90,16 @@
         </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="selected_receivers">
-         <property name="text">
-          <string>Create Receivers only Selected Buildings</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;2)&lt;/span&gt; Creation Method:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Choose the creation methods:</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Receiver Points at 0.1 m in front of buildings&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="margin">
-          <number>3</number>
-         </property>
-         <property name="indent">
-          <number>13</number>
+          <string>Receiver at 4 m above the ground, 0.1 m front of building</string>
          </property>
         </widget>
        </item>
@@ -134,7 +108,7 @@
          <item row="0" column="0">
           <widget class="QRadioButton" name="middle_pts_radioButton">
            <property name="text">
-            <string>Receiver points in the middle of the façades</string>
+            <string>Receiver points in the half of the façades</string>
            </property>
           </widget>
          </item>
@@ -176,13 +150,13 @@
        <item>
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;According to case 2b Directive 2002/49/EC Annex II - Façades are &lt;br/&gt;split up every 5 m from starting position onwards, with a receiver&lt;br/&gt;position placed  halfway the 5 m segment. The remaining &lt;br/&gt;section has its receiver point in the middle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;In according to case 2b Directive 2002/49/EC Annex II - Façades are &lt;br/&gt;split up every 5 m from the start position onwards, with a receiver&lt;br/&gt;position placed at the halfway the 5m segment. The remaining &lt;br/&gt;section has its receiver point in its mid-point&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="margin">
           <number>0</number>
          </property>
          <property name="indent">
-          <number>19</number>
+          <number>25</number>
          </property>
         </widget>
        </item>
@@ -216,7 +190,7 @@
             <string>Receiver at 4 m above the ground</string>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;3)&lt;/span&gt; Receiver Points Layer (output point layer)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>Receivers layer (output point layer)</string>
            </property>
           </widget>
          </item>
@@ -282,173 +256,104 @@
          </item>
         </layout>
        </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="infoReceivers">
-           <property name="text">
-            <string>Info</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Grid Points</string>
+       <string>Grid</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLabel" name="label_2">
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="whatsThis">
-              <string/>
-             </property>
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;1)&lt;/span&gt; Receiver Points Spacing [m] &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="resolution_comboBox"/>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QgsExtentGroupBox" name="ExtentGrid">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+          <widget class="QLabel" name="label_2">
+           <property name="toolTip">
+            <string>Receiver spacing (m) at 4 m above the ground</string>
            </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>50</height>
-            </size>
+           <property name="whatsThis">
+            <string/>
            </property>
-           <property name="title">
-            <string>2) Extension Layer</string>
+           <property name="text">
+            <string>Receiver spacing at 4 m above the ground</string>
            </property>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;3)&lt;/span&gt; Grid Points Layer (output point layer)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="gridpoint_lineEdit"/>
-           </item>
-           <item>
-            <widget class="QPushButton" name="gridSave_pushButton">
-             <property name="text">
-              <string>Browse</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="runGrid_pushButton">
-             <property name="text">
-              <string>OK</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_6">
-           <item>
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="infoGrid">
-             <property name="text">
-              <string>Info</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QComboBox" name="resolution_comboBox"/>
          </item>
         </layout>
        </item>
        <item>
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Building Mask layer (polygon)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QgsMapLayerComboBox" name="BuildingMaskLayerCombo"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QgsExtentGroupBox" name="ExtentGrid">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="sizeHint" stdset="0">
+         <property name="minimumSize">
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>0</width>
+           <height>50</height>
           </size>
          </property>
-        </spacer>
+         <property name="title">
+          <string>Extent layer</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Grid layer (output point layer)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="gridpoint_lineEdit"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="gridSave_pushButton">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QProgressBar" name="progressBarGridReceiver">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="runGrid_pushButton">
+           <property name="text">
+            <string>OK</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -484,8 +389,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>472</x>
-     <y>405</y>
+     <x>248</x>
+     <y>254</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -500,8 +405,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>472</x>
-     <y>405</y>
+     <x>316</x>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

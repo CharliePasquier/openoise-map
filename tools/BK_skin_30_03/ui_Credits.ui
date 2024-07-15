@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>513</width>
-    <height>452</height>
+    <height>436</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>opeNoise Map - Informations</string>
+   <string>opeNoise - Credits</string>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
@@ -47,20 +47,14 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>35</height>
+       <height>15</height>
       </size>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;OpeNoise Map&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>OPENOISE:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
-     </property>
-     <property name="margin">
-      <number>0</number>
-     </property>
-     <property name="indent">
-      <number>0</number>
      </property>
     </widget>
    </item>
@@ -79,7 +73,7 @@
       </size>
      </property>
      <property name="text">
-      <string>Qgis Plugin to Compute Noise Levels</string>
+      <string>Qgis plugin to compute noise levels</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -101,7 +95,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Version 2.2 - July 2024&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>Version 2.0 - April 2022</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -158,7 +152,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CREATED BY&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>CREATED BY:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -211,6 +205,22 @@
     </widget>
    </item>
    <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Preferred</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>5</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
     <widget class="Line" name="line_2">
      <property name="maximumSize">
       <size>
@@ -238,7 +248,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;WITH THE SUPPORT OF&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>WITH THE SUPPORT OF:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -256,11 +266,27 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>16777215</height>
+       <height>15</height>
       </size>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Città Metropolitana di Torino&lt;br/&gt;&lt;a href=&quot;www.cittametropolitana.torino.it&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.cittametropolitana.torino.it&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>Città metropolitana di Torino</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_11">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>15</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://www.cittametropolitana.torino.it&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.cittametropolitana.torino.it&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -273,7 +299,17 @@
    <item>
     <widget class="QLabel" name="label_15">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Città di Torino&lt;br/&gt;&lt;a href=&quot;www.comune.torino.it&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.comune.torino.it&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>Città di Torino</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_16">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://www.comune.torino.it/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.comune.torino.it/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -286,7 +322,7 @@
    <item>
     <widget class="QLabel" name="label_9">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pierluigi De Rosa &lt;br/&gt;&lt;a href=&quot;https://www.onegis.it/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.onegis.it&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ing. Pierluigi De Rosa - &lt;a href=&quot;https://www.onegis.it/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.onegis.it&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -297,14 +333,17 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label_16">
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;github&lt;/span&gt;: &lt;a href=&quot;https://github.com/Arpapiemonte/openoise-map&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/Arpapiemonte/openoise-map&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="openExternalLinks">
-      <bool>true</bool>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>5</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
    <item>
     <widget class="Line" name="line_3">
@@ -333,11 +372,8 @@
        <height>15</height>
       </size>
      </property>
-     <property name="lineWidth">
-      <number>0</number>
-     </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CONTACTS&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>CONTACTS:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

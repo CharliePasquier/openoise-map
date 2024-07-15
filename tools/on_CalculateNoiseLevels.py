@@ -108,6 +108,57 @@ def get_levels(settings,source_layer,source_feat):
         for key in list(level_global.keys()):
             level_bands[key] = on_Acoustics.GlobalToOctaveBands('pink',level_global[key])
 
+    # POWER_P_frequencies
+    if source_layer.geometryType() == QgsWkbTypes.PointGeometry and settings['implementation_pts_freq'] == 'True':
+        if settings['period_pts_gen_freq'] != None:
+            level_bands['Lgeneric'] = {63: source_feat[ settings['POWER_P_GEN_63']],
+                                        125:source_feat[ settings['POWER_P_GEN_125']],
+                                        250:source_feat[ settings['POWER_P_GEN_250']],
+                                        500:source_feat[ settings['POWER_P_GEN_500']],
+                                        1000:source_feat[ settings['POWER_P_GEN_1000']],
+                                        2000:source_feat[ settings['POWER_P_GEN_2000']],
+                                        4000:source_feat[ settings['POWER_P_GEN_4000']],
+                                        8000:source_feat[ settings['POWER_P_GEN_8000']]}
+
+            #print('level_bands: ',level_bands)
+            level_global['Lgeneric'] = on_Acoustics.DetailOctaveBandsToGlobal(level_bands)
+            
+        if settings['period_pts_day_freq'] != None:
+            level_bands['Lday'] = {63: source_feat[ settings['POWER_P_DAY_63']],
+                                        125:source_feat[ settings['POWER_P_DAY_125']],
+                                        250:source_feat[ settings['POWER_P_DAY_250']],
+                                        500:source_feat[ settings['POWER_P_DAY_500']],
+                                        1000:source_feat[ settings['POWER_P_DAY_1000']],
+                                        2000:source_feat[ settings['POWER_P_DAY_2000']],
+                                        4000:source_feat[ settings['POWER_P_DAY_4000']],
+                                        8000:source_feat[ settings['POWER_P_DAY_8000']]}
+
+            level_global['Lday'] = on_Acoustics.DetailOctaveBandsToGlobal(level_bands)
+            
+        if settings['period_pts_eve_freq'] != None:
+            level_bands['Levening'] = {63: source_feat[ settings['POWER_P_EVE_63']],
+                                        125:source_feat[ settings['POWER_P_EVE_125']],
+                                        250:source_feat[ settings['POWER_P_EVE_250']],
+                                        500:source_feat[ settings['POWER_P_EVE_500']],
+                                        1000:source_feat[ settings['POWER_P_EVE_1000']],
+                                        2000:source_feat[ settings['POWER_P_EVE_2000']],
+                                        4000:source_feat[ settings['POWER_P_EVE_4000']],
+                                        8000:source_feat[ settings['POWER_P_EVE_8000']]}
+
+            level_global['Levening'] = on_Acoustics.DetailOctaveBandsToGlobal(level_bands)
+            
+        if settings['period_pts_nig_freq'] != None:
+            level_bands['Lnight'] = {63: source_feat[ settings['POWER_P_NIG_63']],
+                                        125:source_feat[ settings['POWER_P_NIG_125']],
+                                        250:source_feat[ settings['POWER_P_NIG_250']],
+                                        500:source_feat[ settings['POWER_P_NIG_500']],
+                                        1000:source_feat[ settings['POWER_P_NIG_1000']],
+                                        2000:source_feat[ settings['POWER_P_NIG_2000']],
+                                        4000:source_feat[ settings['POWER_P_NIG_4000']],
+                                        8000:source_feat[ settings['POWER_P_NIG_8000']]}
+
+            level_global['Lnight'] = on_Acoustics.DetailOctaveBandsToGlobal(level_bands)
+
     # POWER_R
     elif source_layer.geometryType() == QgsWkbTypes.LineGeometry and settings['implementation_roads'] == 'POWER_R':
         if settings['POWER_R_gen'] != None:
@@ -124,6 +175,23 @@ def get_levels(settings,source_layer,source_feat):
             # fix_print_with_import
 
             level_bands[key] = on_Acoustics.GlobalToOctaveBands('ISO_traffic_road',level_global[key])
+
+    # CNOSSOS_R
+    elif source_layer.geometryType() == QgsWkbTypes.LineGeometry and settings['implementation_roads'] == 'CNOSSOS_R':
+        if settings['CNOSSOS_R_gen'] != None:
+            level_global['Lgeneric'] = source_feat[settings['CNOSSOS_R_gen']]
+        if settings['CNOSSOS_R_day'] != None:
+            level_global['Lday'] = source_feat[settings['CNOSSOS_R_day']]
+        if settings['CNOSSOS_R_eve'] != None:
+            level_global['Levening'] = source_feat[settings['CNOSSOS_R_eve']]
+        if settings['CNOSSOS_R_nig'] != None:
+            level_global['Lnight'] = source_feat[settings['CNOSSOS_R_nig']]
+
+        #print('level global: ',level_global)
+        for key in list(level_global.keys()):
+            # fix_print_with_import
+            # todo - forse qui calcola male i level band
+            level_bands[key] = on_Acoustics.GlobalToOctaveBands('pink', level_global[key])
 
     # NMPB
     elif source_layer.geometryType() == QgsWkbTypes.LineGeometry and settings['implementation_roads'] == 'NMPB':
@@ -241,6 +309,7 @@ def get_levels(settings,source_layer,source_feat):
                 if settings[key_setting] is not None:
                     input_dict[key] = source_feat.attributes()[source_layer.dataProvider().fieldNameIndex(settings[key_setting])]
 
+            print('Lgnig:', input_dict)
             level_bands['Lnight'] = on_Acoustics.CNOSSOS(input_dict).bands()
             level_global['Lnight'] = on_Acoustics.OctaveBandsToGlobalA(level_bands['Lnight'])
 
@@ -249,11 +318,11 @@ def get_levels(settings,source_layer,source_feat):
     levels['global'] = level_global
     levels['bands'] = level_bands
 
-    # print("levels",levels)
     return levels
 
 
-def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_layer, settings, level_field_index, obstacles_layer, rays_writer, diff_rays_writer, diff3D_rays_writer):
+def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_layer, settings, level_field_index,
+         obstacles_layer, rays_writer, diff_rays_writer, diff3D_rays_writer):
 
     # partialPercBar store the corresponding partial for each progressbar. Six in total and grouped un one main ProgressBar is 100/
     partialPercBar = 100/6.
@@ -294,11 +363,12 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
 #        print 'crea diffraction points ',datetime.now() - time
         time = datetime.now()
     else:
-        totalBar.setValue(partialPercBar)
+        totalBar.setValue(int(partialPercBar))
 
 
     # Create emission layer that will contain all the emission pts from source_pts and source_roads
     emission_pts_layer_path = os.path.abspath(os.path.join(temp_dir + os.sep + "emission_pts.shp"))
+    print('emissioni:',emission_pts_layer_path)
     # emission_pts_fields = [QgsField("type", QVariant.String),
     #                        QgsField("id_source", QVariant.Int),
     #                        QgsField("segment", QVariant.String),]
@@ -327,6 +397,8 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
             levels = get_levels(settings,source_pts_layer,source_feat)
             source_pts_levels_dict[source_feat.id()] = levels
 
+            print('calc source pts levels dict:',source_pts_levels_dict)
+
             # add feat to emission pts layer
             source_feat.setAttributes(['pt',source_feat.id(),None])
             emission_pts_writer.addFeature(source_feat)
@@ -343,9 +415,9 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
 
         ## create emission points from roads source
         emission_pts_roads_layer_path = os.path.abspath(os.path.join(temp_dir + os.sep + "emission_pts_roads.shp"))
-        on_CreateEmissionPoints.run(source_roads_layer.source(),receiver_layer.source(),emission_pts_roads_layer_path,research_ray)
+        emission_pts_roads_layer = on_CreateEmissionPoints.run(source_roads_layer.source(),receiver_layer.source(),emission_pts_roads_layer_path,research_ray)
 
-        emission_pts_roads_layer = QgsVectorLayer(emission_pts_roads_layer_path,'emission_pts_roads',"ogr")
+        # emission_pts_roads_layer = QgsVectorLayer(emission_pts_roads_layer_path,'emission_pts_roads',"ogr")
 
         # get levels from the road source
         source_roads_levels_dict = {}
@@ -415,6 +487,7 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
 
     del emission_pts_writer
 
+
     # Create dict with all the data
     source_feat_all_dict = {}
     source_layer = QgsVectorLayer(emission_pts_layer_path,'emission pts',"ogr")
@@ -426,10 +499,10 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
 
         source_feat_number = source_feat_number + 1
         barValue = source_feat_number/float(source_feat_total)*100
-        bar.setValue(barValue)
+        bar.setValue(int(barValue))
 
         # totalbar prepare_emi
-        totalBar.setValue(barValue/6+100/6)
+        totalBar.setValue(int(barValue/6+100/6))
 
 
         type_source = source_feat['type']
@@ -512,7 +585,7 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
 
         else:
             diffTOsource_dict = {}
-            totalBar.setValue(100 / 6 * 4)
+            totalBar.setValue(int(100 / 6 * 4))
         progress_bars['difTOsou']['label'].setText('Done in ' + duration(time,datetime.now()) )
 
         # fix_print_with_import
@@ -528,7 +601,7 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
 
         else:
             recTOdiff_dict = {}
-            totalBar.setValue(100 / 6. * 5)
+            totalBar.setValue(int(100 / 6. * 5))
         progress_bars['recTOdif']['label'].setText('Done in ' + duration(time,datetime.now()) )
 
         # fix_print_with_import
@@ -558,9 +631,9 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
 
         receiver_feat_number = receiver_feat_number + 1
         barValue = receiver_feat_number/float(receiver_feat_total)*100
-        bar.setValue(barValue)
+        bar.setValue(int(barValue))
         # totalbar calculate
-        totalBar.setValue(barValue/6+100/6*5)
+        totalBar.setValue(int(barValue/6+100/6*5))
 
         receiver_feat_new_fields = {}
 
@@ -585,6 +658,7 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
 
                         ray_geometry = QgsGeometry.fromPolylineXY( [ receiver_feat.geometry().asPoint() , source_feat.geometry().asPoint() ] )
 
+                        # PART FOR NOISE MODELING CALCULATION EFFECTS
                         d_recTOsource = compute_distance(receiver_feat.geometry().asPoint(),source_feat.geometry().asPoint())
                         # length with receiver points height fixed to 4 m
 
@@ -616,13 +690,13 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
                                     level_dir[key] = on_Acoustics.OctaveBandsToGlobalA(level_atm_bands[key]) - geo_attenuation
                                 else:
                                     level_dir[key] = on_Acoustics.OctaveBandsToGlobal(level_atm_bands[key]) - geo_attenuation
-                                    # print("level_dir[key]",level_dir[key])
+                                #print("level_dir[key]",level_dir[key])
 
                                 # correction for the segment lenght
                                 if feat_type == 'road':
                                     if (settings['implementation_roads'] == 'POWER_R' or settings['implementation_roads'] == 'NMPB'):
                                         level_dir[key] = level_dir[key] + 20 + 10*log10(float(segment)) + 3
-                                    if settings['implementation_roads'] == 'CNOSSOS':
+                                    if (settings['implementation_roads'] == 'CNOSSOS' or settings['implementation_roads'] == 'CNOSSOS_R'):
                                         level_dir[key] = level_dir[key] + 10*log10(float(segment)) + 3
 
                                 receiver_point_lin_level[key] = receiver_point_lin_level[key] + 10**(level_dir[key]/float(10))
@@ -745,7 +819,7 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
                                                 if feat_type == 'road':
                                                     if (settings['implementation_roads'] == 'POWER_R' or settings['implementation_roads'] == 'NMPB'):
                                                         level_dif[key] = level_dif[key] + 20 + 10*log10(float(segment)) + 3
-                                                    if settings['implementation_roads'] == 'CNOSSOS':
+                                                    if (settings['implementation_roads'] == 'CNOSSOS' or settings['implementation_roads'] == 'CNOSSOS_R'):
                                                         level_dif[key] = level_dif[key] + 10*log10(float(segment)) + 3
 
                                                 receiver_point_lin_level[key] = receiver_point_lin_level[key] + 10**(level_dif[key]/float(10))
@@ -901,7 +975,7 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
                                 if feat_type == 'road':
                                     if (settings['implementation_roads'] == 'POWER_R' or settings['implementation_roads'] == 'NMPB'):
                                         level_dif[key] = level_dif[key] + 20 + 10 * log10(float(segment)) + 3
-                                    if settings['implementation_roads'] == 'CNOSSOS':
+                                    if (settings['implementation_roads'] == 'CNOSSOS' or settings['implementation_roads'] == 'CNOSSOS_R'):
                                         level_dif[key] = level_dif[key] + 10 * log10(float(segment)) + 3
                                 #         add noise to final value
                                 receiver_point_lin_level[key] = receiver_point_lin_level[key] + 10**(level_dif[key] / float(10))
@@ -952,7 +1026,7 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
                             #update counter ID rays
                             diff3D_ray_id = diff3D_ray_id +1
 
-            if settings['period_pts_gen'] == "True" or settings['period_roads_gen'] == "True":
+            if settings['period_pts_gen'] == "True" or settings['period_roads_gen'] == "True" or settings['period_pts_gen_freq'] == "True":
                     if receiver_point_lin_level['Lgeneric'] > 0:
                         Lgen = 10*log10(receiver_point_lin_level['Lgeneric'])
                         if Lgen < 0:
@@ -966,7 +1040,7 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
             Lnig = 0
 
             #added control on final data if negative set to zero
-            if settings['period_pts_day'] == "True" or settings['period_roads_day'] == "True":
+            if settings['period_pts_day'] == "True" or settings['period_roads_day'] == "True" or settings['period_pts_day_freq'] == "True":
                     if receiver_point_lin_level['Lday'] > 0:
                         Lday = 10*log10(receiver_point_lin_level['Lday'])
                         if Lday < 0:
@@ -975,7 +1049,7 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
                     else:
                         receiver_feat_new_fields[level_field_index['Lday']] = -99
 
-            if settings['period_pts_eve'] == "True" or settings['period_roads_eve'] == "True":
+            if settings['period_pts_eve'] == "True" or settings['period_roads_eve'] == "True" or settings['period_pts_eve_freq'] == "True":
                     if receiver_point_lin_level['Levening'] > 0:
                         Leve = 10*log10(receiver_point_lin_level['Levening'])
                         if Leve <0:
@@ -984,7 +1058,7 @@ def calc(progress_bars, totalBar,receiver_layer, source_pts_layer, source_roads_
                     else:
                         receiver_feat_new_fields[level_field_index['Levening']] = -99
 
-            if settings['period_pts_nig'] == "True" or settings['period_roads_nig'] == "True":
+            if settings['period_pts_nig'] == "True" or settings['period_roads_nig'] == "True" or settings['period_pts_nig_freq'] == "True":
                     if receiver_point_lin_level['Lnight'] > 0:
                         Lnig = 10*log10(receiver_point_lin_level['Lnight'])
                         if Lnig <0:
@@ -1112,6 +1186,7 @@ def run(settings,progress_bars,totalBar):
     else:
         diff_rays_writer = None
 
+    # defines diff rays layer 3D vertical
     if diff3D_layer_path is not None:
 
         # add fields
@@ -1153,19 +1228,19 @@ def run(settings,progress_bars,totalBar):
     #modified version in creating fields on existing layer in qgis 3.x
     receiver_layer.startEditing()
     #level_fields = []
-    if settings['period_pts_gen'] == "True" or settings['period_roads_gen'] == "True":
+    if settings['period_pts_gen'] == "True" or settings['period_roads_gen'] == "True" or settings['period_pts_gen_freq'] == "True":
         receiver_layer.addAttribute(QgsField('Lgeneric', QVariant.Double, len=5, prec=1))
         level_field_index['Lgeneric'] = fields_number
         fields_number = fields_number + 1
-    if settings['period_pts_day'] == "True" or settings['period_roads_day'] == "True":
+    if settings['period_pts_day'] == "True" or settings['period_roads_day'] == "True" or settings['period_pts_day_freq'] == "True":
         receiver_layer.addAttribute((QgsField('Lday', QVariant.Double, len=5, prec=1)))
         level_field_index['Lday'] = fields_number
         fields_number = fields_number + 1
-    if settings['period_pts_eve'] == "True" or settings['period_roads_eve'] == "True":
+    if settings['period_pts_eve'] == "True" or settings['period_roads_eve'] == "True" or settings['period_pts_eve_freq'] == "True":
         receiver_layer.addAttribute(QgsField('Levening', QVariant.Double,len=5,prec=1))
         level_field_index['Levening'] = fields_number
         fields_number = fields_number + 1
-    if settings['period_pts_nig'] == "True" or settings['period_roads_nig'] == "True":
+    if settings['period_pts_nig'] == "True" or settings['period_roads_nig'] == "True" or settings['period_pts_nig_freq'] == "True":
         receiver_layer.addAttribute(QgsField('Lnight', QVariant.Double,len=5,prec=1))
         level_field_index['Lnight'] = fields_number
         fields_number = fields_number + 1
@@ -1199,8 +1274,9 @@ def run(settings,progress_bars,totalBar):
 
         if 'Lgeneric' in level_field_index:
             if Skip_intersectionDD is False:
+                # print('receiver feat: ',receiver_feat_new_fields,f.id(),f['Lgeneric'])
                 f['Lgeneric'] = receiver_feat_new_fields[f.id()][level_field_index['Lgeneric']]
-                #print(receiver_feat_new_fields,f.id(),f['Lgeneric'])
+
             else:
                 f['Lgeneric'] = -99
         if 'Lday' in level_field_index:
