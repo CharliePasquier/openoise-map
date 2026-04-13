@@ -24,7 +24,9 @@
 #from PyQt4.QtCore import *
 from builtins import str
 
-from PyQt5.uic.properties import QtGui
+from PyQt6.uic.properties import QtGui
+#from PyQt5.uic.properties import QtGui
+
 from qgis.PyQt.QtCore import QObject, QSize
 
 from qgis.PyQt import uic
@@ -38,7 +40,8 @@ import os, sys
 
 sys.path.append(os.path.dirname(__file__))
 ui_SourceDetailsRoads_ui, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'ui_SourceDetailsRoads.ui'), resource_suffix='')
+    os.path.dirname(__file__), 'ui_SourceDetailsRoads.ui')#, resource_suffix=''
+)
 
 
 from . import on_Settings

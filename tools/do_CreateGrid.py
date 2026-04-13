@@ -25,8 +25,10 @@ try:
 except ImportError:
     from qgis.core import QGis as Qgis
 from qgis.PyQt import QtCore
-from PyQt5 import QtGui, uic
-from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QMessageBox
+from PyQt6 import QtGui, uic
+from PyQt6.QtWidgets import QDialog, QApplication, QFileDialog, QMessageBox
+#from PyQt5 import QtGui, uic
+#from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QMessageBox
 
 import os
 import sys
@@ -38,7 +40,8 @@ ui_path = os.path.join(
     'ui_ContoursLevel.ui'
 )
 
-FORM_CLASS, _ = uic.loadUiType(ui_path, resource_suffix='')
+FORM_CLASS, _ = uic.loadUiType(ui_path#, resource_suffix=''
+)
 
 
 class Dialog(QDialog, FORM_CLASS):

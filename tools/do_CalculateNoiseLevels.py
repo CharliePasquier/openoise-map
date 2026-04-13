@@ -48,7 +48,8 @@ from datetime import datetime
 
 sys.path.append(os.path.dirname(__file__))
 NoiseLevel_ui, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'ui_CalculateNoiseLevels.ui'), resource_suffix='')
+    os.path.dirname(__file__), 'ui_CalculateNoiseLevels.ui')#, resource_suffix=''
+)
 from . import do_SourceDetailsPts,do_SourceDetailsRoads
 from . import on_Settings
 from . import on_CalculateNoiseLevels

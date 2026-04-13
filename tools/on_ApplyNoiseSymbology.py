@@ -22,7 +22,8 @@
 """
 
 
-from PyQt5.QtWidgets import QMessageBox
+from PyQt6.QtWidgets import QMessageBox
+#from PyQt5.QtWidgets import QMessageBox
 from qgis.PyQt.QtGui import QColor
 from qgis.core import  (QgsGraduatedSymbolRenderer,
                         QgsSymbol,

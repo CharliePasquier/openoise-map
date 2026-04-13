@@ -43,7 +43,8 @@ from datetime import datetime
 
 sys.path.append(os.path.dirname(__file__))
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'ui_CreateReceiverPoints.ui'), resource_suffix='')
+    os.path.dirname(__file__), 'ui_CreateReceiverPoints.ui')#, resource_suffix=''
+)
 from . import on_CreateReceiverPoints,on_CreateGrid
 
 from . import on_Settings

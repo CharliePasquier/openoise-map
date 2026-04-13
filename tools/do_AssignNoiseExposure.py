@@ -48,7 +48,8 @@ from math import exp,log
 from datetime import datetime
 sys.path.append(os.path.dirname(__file__))
 Ui_AssignNoiseToBuildings_window, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'ui_NoiseExposure.ui'), resource_suffix='')
+    os.path.dirname(__file__), 'ui_NoiseExposure.ui')#, resource_suffix=''
+)
 
 from . import on_ApplyNoiseSymbology
 

@@ -1,6 +1,8 @@
 import os
-from PyQt5.QtCore import QVariant
-from PyQt5.QtGui import QColor
+from PyQt6.QtCore import QVariant
+from PyQt6.QtGui import QColor
+#from PyQt5.QtCore import QVariant
+#from PyQt5.QtGui import QColor
 from qgis.core import (
     Qgis,
     QgsProject,

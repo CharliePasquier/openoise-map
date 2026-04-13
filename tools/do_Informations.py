@@ -29,7 +29,8 @@ from qgis.PyQt.QtWidgets import QDialog
 
 sys.path.append(os.path.dirname(__file__))
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'ui_Informations.ui'), resource_suffix='')
+    os.path.dirname(__file__), 'ui_Informations.ui')#, resource_suffix=''
+    )
 
 
 from qgis.PyQt import QtCore
