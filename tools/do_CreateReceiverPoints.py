@@ -90,7 +90,7 @@ class Dialog(QDialog,FORM_CLASS):
         self.receiver_layer_pushButton.clicked.connect(self.outFile)
         self.gridSave_pushButton.clicked.connect(self.outputFile_grid)
         self.runGrid_pushButton.clicked.connect(self.runGrid)
-        self.buttonBox = self.buttonBox.button( QDialogButtonBox.Ok )
+        #self.buttonBox = self.buttonBox.button( QDialogButtonBox.StandardButton.Ok )
 
         # set the extend layer definition
         projCrs = QgsProject.instance().crs()

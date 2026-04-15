@@ -406,7 +406,10 @@ def case2b(bar,buildings_layer_path,receiver_points_layer_path,IDs_selected_rece
 
     pt_id = 0
     reachLen = 5 # variable storing distance steps
+    endReach = 0 # Test
     buildings_feat_number = 0
+
+    bar.setValue(int(50)) # Test
 
 
 
