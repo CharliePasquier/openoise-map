@@ -140,55 +140,55 @@ class opeNoise(object):
     def CreateReceiverPoints_show(self):
     
         d = do_CreateReceiverPoints.Dialog(self.iface)
-        flags = Qt.Window | Qt.WindowSystemMenuHint | Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint
+        flags = Qt.WindowType.Window | Qt.WindowType.WindowSystemMenuHint | Qt.WindowType.WindowMinimizeButtonHint | Qt.WindowType.WindowMaximizeButtonHint | Qt.WindowType.WindowCloseButtonHint
         d.setWindowFlags(flags)
-        d.setWindowModality(Qt.ApplicationModal)
+        d.setWindowModality(Qt.WindowModality.ApplicationModal)
         d.setFixedSize(d.size())
         d.show()
-        d.exec_()    
+        d.exec()    
 
        
     def AssignLevelsToBuildings_show(self):
 
         d = do_AssignNoiseExposure.Dialog(self.iface)
-        flags = Qt.Window | Qt.WindowSystemMenuHint | Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint
+        flags = Qt.WindowType.Window | Qt.WindowType.WindowSystemMenuHint | Qt.WindowType.WindowMinimizeButtonHint | Qt.WindowType.WindowMaximizeButtonHint | Qt.WindowType.WindowCloseButtonHint
         d.setWindowFlags(flags)
-        d.setWindowModality(Qt.ApplicationModal)
+        d.setWindowModality(Qt.WindowModality.ApplicationModal)
         d.setFixedSize(d.size())
         d.show()
-        d.exec_()   
+        d.exec()   
 
     def CalculateNoiseLevels_show(self):
 
         d = do_CalculateNoiseLevels.Dialog(self.iface)
-        flags = Qt.Window | Qt.WindowSystemMenuHint | Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint
+        flags = Qt.WindowType.Window | Qt.WindowType.WindowSystemMenuHint | Qt.WindowType.WindowMinimizeButtonHint | Qt.WindowType.WindowMaximizeButtonHint | Qt.WindowType.WindowCloseButtonHint
         d.setWindowFlags(flags)
-        d.setWindowModality(Qt.ApplicationModal)
+        d.setWindowModality(Qt.WindowModality.ApplicationModal)
         d.setFixedSize(d.size())
         d.show()
-        d.exec_()   
+        d.exec()   
 
 
 
     def CreateGrid_show(self):
 
         d = do_CreateGrid.Dialog(self.iface)
-        flags = Qt.Window | Qt.WindowSystemMenuHint | Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint
+        flags = Qt.WindowType.Window | Qt.WindowType.WindowSystemMenuHint | Qt.WindowType.WindowMinimizeButtonHint | Qt.WindowType.WindowMaximizeButtonHint | Qt.WindowType.WindowCloseButtonHint
         d.setWindowFlags(flags)
-        d.setWindowModality(Qt.ApplicationModal)
+        d.setWindowModality(Qt.WindowModality.ApplicationModal)
         d.setFixedSize(d.size())
         d.show()
-        d.exec_()   
+        d.exec()   
 
     def Informations_show(self):
 
         d = do_Help.Dialog_info(self.iface)
-        flags = Qt.Window | Qt.WindowSystemMenuHint | Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint
+        flags = Qt.WindowType.Window | Qt.WindowType.WindowSystemMenuHint | Qt.WindowType.WindowMinimizeButtonHint | Qt.WindowType.WindowMaximizeButtonHint | Qt.WindowType.WindowCloseButtonHint
         d.setWindowFlags(flags)
-        d.setWindowModality(Qt.ApplicationModal)
+        d.setWindowModality(Qt.WindowModality.ApplicationModal)
         d.setFixedSize(d.size())
         d.show()
-        d.exec_()
+        d.exec()
 
 #    def Informations_show(self):
 #
@@ -201,9 +201,9 @@ class opeNoise(object):
     def Credits_show(self):
 
         d = do_Informations.Dialog_info(self.iface)
-        flags = Qt.Window | Qt.WindowSystemMenuHint | Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint
+        flags = Qt.WindowType.Window | Qt.WindowType.WindowSystemMenuHint | Qt.WindowType.WindowMinimizeButtonHint | Qt.WindowType.WindowMaximizeButtonHint | Qt.WindowType.WindowCloseButtonHint
         d.setWindowFlags(flags)
-        d.setWindowModality(Qt.ApplicationModal)
+        d.setWindowModality(Qt.WindowModality.ApplicationModal)
         d.setFixedSize(d.size())
         d.show()
-        d.exec_()  
+        d.exec()  

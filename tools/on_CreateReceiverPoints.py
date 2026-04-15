@@ -437,7 +437,7 @@ def case2b(bar,buildings_layer_path,receiver_points_layer_path,IDs_selected_rece
                 totLen = gLine.length()
                 # prog = reachLen / 2.
                 startReach = 0
-                # endReach = 5
+                endReach = 0
 
                 steps = list()
                 while startReach < totLen:
@@ -471,7 +471,7 @@ def case2b(bar,buildings_layer_path,receiver_points_layer_path,IDs_selected_rece
             totLen = gLine.length()
             # prog = reachLen / 2.
             startReach = 0
-            # endReach = 5
+            endReach = 0
 
             steps = list()
             while startReach < totLen and endReach < totLen:

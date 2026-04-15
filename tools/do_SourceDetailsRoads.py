@@ -372,7 +372,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 </table>
         ''']
         result = ScrollMessageBox(string_list, None)
-        result.exec_()
+        result.exec()
 
     def HelpCNOSSOS_show(self):
         string_list = [
@@ -597,7 +597,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
             '''
         ]
         result = ScrollMessageBox(string_list, None)
-        result.exec_()
+        result.exec()
 
 
 

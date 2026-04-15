@@ -210,9 +210,9 @@ class Dialog(QDialog,NoiseLevel_ui):
             return False
         else:
             d = do_SourceDetailsPts.Dialog(self.iface, self.sources_pts_layer_comboBox.currentText())
-            d.setWindowModality(Qt.ApplicationModal)
+            d.setWindowModality(Qt.WindowModality.ApplicationModal)
             d.show()
-            d.exec_()
+            d.exec()
 
 
 
@@ -222,9 +222,9 @@ class Dialog(QDialog,NoiseLevel_ui):
             return False
         else:
             d = do_SourceDetailsRoads.Dialog(self.iface, self.sources_roads_layer_comboBox.currentText())
-            d.setWindowModality(Qt.ApplicationModal)
+            d.setWindowModality(Qt.WindowModality.ApplicationModal)
             d.show()
-            d.exec_()
+            d.exec()
 
 
     def populateLayersReceiver( self ):
